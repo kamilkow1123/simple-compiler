@@ -2,7 +2,6 @@
 #include<string.h>
 #include<ctype.h>
 #include<algorithm>
-#include "token.cpp"
 
 int min(int a, int b){
   return (a<b) ? a : b ;

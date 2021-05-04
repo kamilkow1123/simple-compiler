@@ -32,7 +32,7 @@ enum Type{
   TOKEN_OR, // ||
   TOKEN_NOT_EQUAL, // !=
   TOKEN_DOUBLE_EQUAL, // ==
-} type;
+};
 
 class Token{
 private:

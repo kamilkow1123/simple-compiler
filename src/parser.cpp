@@ -1,5 +1,4 @@
 #include "include/parser.h"
-#include "include/syntaxTree.h"
 
 Parser::Parser(Lexer *lexer){
     this->lexer = lexer;

@@ -1,13 +1,13 @@
-exec = a.out
+exec = sowa.out
 sources = $(wildcard src/*.cpp)
 objects = $(sources:.cpp=.o)
-flags = -g -Wall -lm -ldl -fPIC
+flags = -g -Wall -lm -ldl -fPIC -Wl,--export-all-symbols
 
 $(exec): $(objects)
 	gcc $(objects) $(flags) -o $(exec)
 
 %.o: %.cpp include/%.h
-	gcc $(flags) $< -o $@
+	gcc -c $(flags) $< -o $@
 
 clean:
 	-rm *.out
