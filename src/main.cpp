@@ -1,7 +1,7 @@
 #include<iostream>
 #include<fstream>
 #include<string>
-#include "include/sowa.h"
+#include "sowa.cpp"
 
 int main()
 {

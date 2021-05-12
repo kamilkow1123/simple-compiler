@@ -2,6 +2,7 @@
 #include<string.h>
 #include<ctype.h>
 #include<algorithm>
+#include "token.cpp"
 
 int min(int a, int b){
   return (a<b) ? a : b ;
@@ -50,14 +51,31 @@ char Lexer::lexer_peek(int next_char){
 // As long as the src fragment is an alphanumeric string read it, and at the end create token as TOKEN_ID with name
 // RETURN EXAMPLE: ("main", 0)
 Token *Lexer::lexer_parse_id(){ 
-  string value = "";
+    string value = "";
 
-  while(isalpha(this->c)){
-    value += this->c;
-    this->lexer_advance();
-  }
-  Token *token = new Token(value, TOKEN_ID);
-  return token;
+    while(isalpha(this->c)){
+        value += this->c;
+        this->lexer_advance();
+    }
+
+    Token *token = nullptr;
+    if(value == "if"){
+        token = new Token(value, TOKEN_IF);
+    }
+    else if(value == "while"){
+        token = new Token(value, TOKEN_WHILE);
+    }
+    else if(value == "let"){
+        token = new Token(value, TOKEN_LET);
+    }
+    else if(value == "return"){
+        token = new Token(value, TOKEN_RETURN);
+    }
+    else{
+        token = new Token(value, TOKEN_ID);
+    }
+
+    return token;
 }
 
 Token *Lexer::lexer_parse_number(){
