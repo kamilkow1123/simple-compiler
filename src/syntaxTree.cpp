@@ -27,3 +27,19 @@ SyntaxTree *SyntaxTree::getValue(){
 void SyntaxTree::setDataType(int data){
     this->data_type = data;
 }
+
+int SyntaxTree::getDataType(){
+    return this->data_type;
+}
+
+SyntaxType SyntaxTree::getType(){
+    return this->type;
+}
+
+void SyntaxTree::setType(SyntaxType type){
+    this->type = type;
+}
+
+void SyntaxTree::setIntValue(int int_value){
+    this->int_value = int_value;
+}

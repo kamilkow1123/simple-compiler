@@ -6,10 +6,12 @@ enum SyntaxType
 {
     ST_COMPOUND,
     ST_FUNCTION,
-    ST_ASSIGNMENT,
     ST_CALL,
+    ST_ASSIGNMENT,
+    ST_DEFINITION_TYPE,
     ST_VARIABLE,
-    ST_STATEMENT_RETURN,
+    ST_STATEMENT,
+    ST_INT,
     ST_NOOP, // No operation
 };
 
@@ -20,6 +22,7 @@ private:
     List *children;
     string name;
     SyntaxTree *value;
+    int int_value;
     int data_type;
 public:
     SyntaxTree(SyntaxType);
@@ -28,7 +31,11 @@ public:
     void setValue(SyntaxTree*);
     SyntaxTree *getValue();
     void setDataType(int);
+    int getDataType();
+    SyntaxType getType();
+    void setType(SyntaxType);
     List* getChildren() {return this->children;}
+    void setIntValue(int);
 };
 
 #endif

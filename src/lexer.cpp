@@ -59,22 +59,24 @@ Token *Lexer::lexer_parse_id(){
     }
 
     Token *token = nullptr;
-    if(value == "if"){
-        token = new Token(value, TOKEN_IF);
-    }
-    else if(value == "while"){
-        token = new Token(value, TOKEN_WHILE);
-    }
-    else if(value == "let"){
-        token = new Token(value, TOKEN_LET);
-    }
-    else if(value == "return"){
-        token = new Token(value, TOKEN_RETURN);
-    }
-    else{
-        token = new Token(value, TOKEN_ID);
-    }
+    // if(value == "if"){
+    //     token = new Token(value, TOKEN_IF);
+    // }
+    // else if(value == "while"){
+    //     token = new Token(value, TOKEN_WHILE);
+    // }
+    // else if(value == "let"){
+    //     token = new Token(value, TOKEN_LET);
+    // }
+    // else if(value == "return"){
+    //     token = new Token(value, TOKEN_RETURN);
+    // }
+    // else{
+    //     
+    // }
 
+    token = new Token(value, TOKEN_ID);
+    
     return token;
 }
 
@@ -112,6 +114,8 @@ Token *Lexer::lexer_next_token(){
 		case '+': return this->lexer_advance_current(TOKEN_PLUS);
 		case '-': return this->lexer_advance_current(TOKEN_MINUS);
 		case '*': return this->lexer_advance_current(TOKEN_ASTERISK);
+		case '<': return this->lexer_advance_current(TOKEN_LT);
+		case '>': return this->lexer_advance_current(TOKEN_GT);
 		case '&': 
 			if(this->lexer_peek(1) == '&')
 			return this->lexer_advance_with(this->lexer_advance_with(new Token("&&", TOKEN_AND)));
@@ -119,6 +123,8 @@ Token *Lexer::lexer_next_token(){
 		case '=': 
 			if(this->lexer_peek(1) == '=')
 			return this->lexer_advance_with(this->lexer_advance_with(new Token("==", TOKEN_DOUBLE_EQUAL)));
+            if(this->lexer_peek(1) == '>')
+			return this->lexer_advance_with(this->lexer_advance_with(new Token("=>", TOKEN_ARROW_RIGHT)));
 			return this->lexer_advance_with(new Token("=", TOKEN_EQUALS));
 		case '!': 
 			if(this->lexer_peek(1) == '=')

@@ -32,6 +32,9 @@ enum Type{
   TOKEN_OR, // ||
   TOKEN_NOT_EQUAL, // !=
   TOKEN_DOUBLE_EQUAL, // ==
+  TOKEN_LT, // <
+  TOKEN_GT, // >
+  TOKEN_ARROW_RIGHT //=>
 };
 
 class Token{
