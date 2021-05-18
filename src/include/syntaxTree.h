@@ -1,7 +1,7 @@
 #ifndef _SYNTAX_TREE_H_
 #define _SYNTAX_TREE_H_
 #include<iostream>
-#include "list.h"
+#include "../list.cpp"
 using namespace std;
 
 enum SyntaxType

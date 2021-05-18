@@ -1,7 +1,7 @@
 #ifndef _PARSER_H_
 #define _PARSER_H_
 #include "lexer.h"
-#include "../syntaxTree.cpp"
+#include "syntaxTree.h"
 
 class Parser{
 private:

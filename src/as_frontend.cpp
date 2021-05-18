@@ -1,5 +1,5 @@
 #include<iostream>
-#include "include/syntaxTree.h"
+#include "include/as_frontend.h"
 using namespace std;
 
 string as_f_compound(SyntaxTree *st){
@@ -20,15 +20,15 @@ string as_f_assignment(SyntaxTree *st){
 }
 
 string as_f_variable(SyntaxTree *st){
-
+    return "";
 }
 
 string as_f_call(SyntaxTree *st){
-
+    return "";
 }
 
 string as_f_int(SyntaxTree *st){
-
+    return "";
 }
 
 string as_f(SyntaxTree *st){
