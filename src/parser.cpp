@@ -1,4 +1,5 @@
 #include "include/parser.h"
+#include<string>
 #include "types.cpp"
 
 Parser::Parser(Lexer *lexer){

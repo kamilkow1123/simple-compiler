@@ -12,6 +12,7 @@ public:
     void list_push(void*);
     void *getItems(int i) { return this->items[i]; }
     size_t getSize() { return this->size; }
+    
 };
 
 #endif // SOWA_LIST_H

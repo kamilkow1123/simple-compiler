@@ -7,7 +7,7 @@ $(exec): $(objects)
 	gcc $(objects) $(flags) -o $(exec)
 
 %.o: %.cpp include/%.h
-	gcc -c $(flags) $< -o $@
+	gcc $(flags) $< -o $@
 
 clean:
 	-rm *.out

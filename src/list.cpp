@@ -11,7 +11,6 @@ List::List(size_t item_size)
 void List::list_push(void* item)
 {
     this->size += 1;
-    // cout << "JESTEM TU KURWA\n";
     if(this->items == nullptr)
         this->items = new void*;
     else
@@ -19,5 +18,5 @@ void List::list_push(void* item)
         this->items = (void**)realloc(this->items, (this->size * this->item_size));
     }
 
-    this->items[this->size] = item;
+    this->items[this->size - 1] = item;
 }
