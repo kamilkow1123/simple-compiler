@@ -38,6 +38,7 @@ public:
     void setType(SyntaxType);
     List* getChildren() {return this->children;}
     void setIntValue(int);
+    int getIntValue(){return this->int_value;};
 };
 
 #endif

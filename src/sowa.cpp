@@ -8,15 +8,15 @@ void sowa_compile(string src){
     Parser *parser = new Parser(lexer);
     SyntaxTree *root = parser->parser_parse();
 
-    string s = as_f(root);
+    string s = as_f_root(root);
 
     cout<<s<<endl;
 
-    Token *token = 0;
+    // Token *token = 0;
 
-    while((token = lexer->lexer_next_token())->getType() != TOKEN_END_OF_FILE)
-    {
-        cout<<"Token("<<token->getValue()<<") ("<<token->getType()<<")"<<endl;
-    }
+    // while((token = lexer->lexer_next_token())->getType() != TOKEN_END_OF_FILE)
+    // {
+    //     cout<<"Token("<<token->getValue()<<") ("<<token->getType()<<")"<<endl;
+    // }
 //   cout<<"Token("<<token->getValue()<<") ("<<token->getType()<<")"<<endl;
 }

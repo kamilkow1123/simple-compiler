@@ -3,5 +3,6 @@
 // #include "syntaxTree.h"
 #include "../syntaxTree.cpp"
 
+string as_f_root(SyntaxTree* st);
 string as_f(SyntaxTree* st);
 #endif
