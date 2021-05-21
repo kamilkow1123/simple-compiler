@@ -10,7 +10,16 @@ void sowa_compile(string src){
 
     string s = as_f_root(root);
 
-    cout<<s<<endl;
+
+    fstream out;
+    out.open("test.s", ios::out);
+    if(out.good()){
+        out<<s;
+    }
+    else{
+        cout<<"Error"<<endl;
+    }
+    
 
     // Token *token = 0;
 
