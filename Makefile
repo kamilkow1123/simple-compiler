@@ -1,19 +1,10 @@
-exec = sowa.out
-sources = $(wildcard src/*.cpp)
-objects = $(sources:.cpp=.o)
-flags = -g -Wall -lm -ldl -fPIC -Wl,--export-all-symbols
+all: main
 
-$(exec): $(objects)
-	gcc $(objects) $(flags) -o $(exec)
-
-%.o: %.cpp include/%.h
-	gcc $(flags) $< -o $@
+main: main.cpp
+	g++ main.cpp -o main.out
 
 clean:
 	-rm *.out
 	-rm *.o
-	-rm *.a
 	-rm src/*.o
-
-lint:
-	clang-tidy src/*.cpp src/include/*.h
+	-rm *.s
