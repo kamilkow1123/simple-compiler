@@ -54,11 +54,13 @@ void sowa_compile(string src)
     sh("as test.s -o test.o");
     sh("ld test.o -o test.out");
 
+    //testing lexer
+
     // Token *token = 0;
 
-    // while((token = lexer->lexer_next_token())->getType() != TOKEN_END_OF_FILE)
+    // while ((token = lexer->lexer_next_token())->getType() != TOKEN_END_OF_FILE)
     // {
-    //     cout<<"Token("<<token->getValue()<<") ("<<token->getType()<<")"<<endl;
+    //     cout << "Token(" << token->getValue() << ") (" << token->getType() << ")" << endl;
     // }
-    //   cout<<"Token("<<token->getValue()<<") ("<<token->getType()<<")"<<endl;
+    // cout << "Token(" << token->getValue() << ") (" << token->getType() << ")" << endl;
 }

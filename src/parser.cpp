@@ -45,31 +45,10 @@ SyntaxTree *Parser::parser_parse_id()
     SyntaxTree *st = new SyntaxTree(ST_VARIABLE);
     st->setName(value);
 
-    if (this->token->getType() == TOKEN_COLON)
+    if (this->token->getType() == TOKEN_LEFT_PAREN)
     {
-        this->parser_eat(TOKEN_COLON);
-
-        while (this->token->getType() == TOKEN_ID)
-        {
-            st->setDataType(typename_to_int(this->token->getValue()));
-            this->parser_eat(TOKEN_ID);
-
-            if (this->token->getType() == TOKEN_LT)
-            {
-                this->parser_eat(TOKEN_LT);
-                st->setDataType(st->getDataType() + typename_to_int(this->token->getValue()));
-                this->parser_eat(TOKEN_ID);
-                this->parser_eat(TOKEN_GT);
-            }
-        }
-    }
-    else
-    {
-        if (this->token->getType() == TOKEN_LEFT_PAREN)
-        {
-            st->setType(ST_CALL);
-            st->setValue(this->parser_parse_list());
-        }
+        st->setType(ST_CALL);
+        st->setValue(this->parser_parse_block());
     }
 
     return st;
@@ -77,62 +56,72 @@ SyntaxTree *Parser::parser_parse_id()
 
 SyntaxTree *Parser::parser_parse_block()
 {
-    this->parser_eat(TOKEN_LEFT_BRACE);
-    SyntaxTree *st = new SyntaxTree(ST_COMPOUND);
-
-    while (this->token->getType() != TOKEN_RIGHT_BRACE)
-    {
-        (st->getChildren())->list_push(this->parser_parse_expression());
-    }
-
-    this->parser_eat(TOKEN_RIGHT_BRACE);
-
-    return st;
-}
-
-SyntaxTree *Parser::parser_parse_list()
-{
     this->parser_eat(TOKEN_LEFT_PAREN);
-
     SyntaxTree *st = new SyntaxTree(ST_COMPOUND);
 
-    (st->getChildren())->list_push(this->parser_parse_expression());
-
-    while (this->token->getType() == TOKEN_COMMA)
+    while (this->token->getType() != TOKEN_RIGHT_PAREN)
     {
-        this->parser_eat(TOKEN_COMMA);
         (st->getChildren())->list_push(this->parser_parse_expression());
     }
 
     this->parser_eat(TOKEN_RIGHT_PAREN);
 
-    if (this->token->getType() == TOKEN_COLON)
+    if (this->token->getType() == TOKEN_LEFT_BRACE)
     {
-        this->parser_eat(TOKEN_COLON);
-
-        while (this->token->getType() == TOKEN_ID)
-        {
-            st->setDataType(typename_to_int(this->token->getValue()));
-            this->parser_eat(TOKEN_ID);
-
-            if (this->token->getType() == TOKEN_LT)
-            {
-                this->parser_eat(TOKEN_LT);
-                st->setDataType(st->getDataType() + typename_to_int(this->token->getValue()));
-                this->parser_eat(TOKEN_ID);
-                this->parser_eat(TOKEN_GT);
-            }
-        }
-    }
-
-    if (this->token->getType() == TOKEN_ARROW_RIGHT)
-    {
-        this->parser_eat(TOKEN_ARROW_RIGHT);
         st->setType(ST_FUNCTION);
         st->setValue(this->parser_parse_compound());
     }
 
     return st;
+}
+
+SyntaxTree *Parser::parser_parse_expression()
+{
+    SyntaxTree *st = new SyntaxTree(ST_COMPOUND);
+
+    (st->getChildren())->list_push(this->parser_parse_statement());
+
+    while (this->token->getType() == TOKEN_COMMA)
+    {
+        this->parser_eat(TOKEN_COMMA);
+        (st->getChildren())->list_push(this->parser_parse_statement());
+    }
+
+    // if (this->token->getType() == TOKEN_COLON)
+    // {
+    //     this->parser_eat(TOKEN_COLON);
+
+    //     while (this->token->getType() == TOKEN_ID)
+    //     {
+    //         st->setDataType(typename_to_int(this->token->getValue()));
+    //         this->parser_eat(TOKEN_ID);
+    //     }
+    // }
+
+    return st;
+}
+
+SyntaxTree *Parser::parser_parse_return()
+{
+    this->parser_eat(TOKEN_RETURN);
+
+    SyntaxTree *st = new SyntaxTree(ST_CALL);
+    st->setName("return");
+    st->setValue(this->parser_parse_block());
+
+    return st;
+}
+
+SyntaxTree *Parser::parser_parse_conditional()
+{
+}
+
+SyntaxTree *Parser::parser_parse_loop()
+{
+}
+
+SyntaxTree *Parser::parser_parse_definition()
+{
 }
 
 SyntaxTree *Parser::parser_parse_int()
@@ -146,16 +135,24 @@ SyntaxTree *Parser::parser_parse_int()
     return st;
 }
 
-SyntaxTree *Parser::parser_parse_expression()
+SyntaxTree *Parser::parser_parse_statement()
 {
     switch (this->token->getType())
     {
     case TOKEN_ID:
         return this->parser_parse_id();
     case TOKEN_LEFT_PAREN:
-        return this->parser_parse_list();
+        return this->parser_parse_block();
     case TOKEN_INT:
         return this->parser_parse_int();
+    case TOKEN_IF:
+        return this->parser_parse_conditional();
+    case TOKEN_WHILE:
+        return this->parser_parse_loop();
+    case TOKEN_RETURN:
+        return this->parser_parse_return();
+    case TOKEN_LET:
+        return this->parser_parse_definition();
     default:
     {
         cout << "[Parser]: Unexpected token: '" << this->token->getValue() << "'" << endl;
@@ -178,7 +175,7 @@ SyntaxTree *Parser::parser_parse_compound()
 
     while (this->token->getType() != TOKEN_END_OF_FILE && this->token->getType() != TOKEN_RIGHT_BRACE)
     {
-        (compound->getChildren())->list_push(this->parser_parse_expression());
+        (compound->getChildren())->list_push(this->parser_parse_statement());
 
         if (this->token->getType() == TOKEN_SEMICOLON)
         {

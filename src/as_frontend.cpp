@@ -34,6 +34,22 @@ string as_f_assignment(SyntaxTree *st)
     return s;
 }
 
+string as_f_function(SyntaxTree *st)
+{
+    string s;
+    const string temp = ".global " + st->getName() + "\n" + st->getName() + ":\n";
+
+    s = temp;
+
+    SyntaxTree *as_val = st->getValue();
+
+    string as_val_val = as_f(as_val->getValue());
+
+    s += as_val_val;
+
+    return s;
+}
+
 string as_f_variable(SyntaxTree *st)
 {
     return "";
@@ -101,6 +117,8 @@ string as_f(SyntaxTree *st)
     case ST_INT:
         next_value = as_f_int(st);
         break;
+    case ST_FUNCTION:
+        next_value = as_f_function(st);
     default:
     {
         cout << "[As frontend]: No frontend for ST of type " << st->getType() << endl;
