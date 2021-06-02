@@ -36,9 +36,7 @@ SyntaxTree *Parser::parser_parse_id()
         this->parser_eat(TOKEN_EQUALS);
         SyntaxTree *st = new SyntaxTree(ST_ASSIGNMENT);
         st->setName(value);
-        // cout<<st->getName()<<endl;
         st->setValue(this->parser_parse_expression());
-        // cout << (st->getValue())->getName();
         return st;
     }
 
@@ -47,7 +45,7 @@ SyntaxTree *Parser::parser_parse_id()
 
     if (this->token->getType() == TOKEN_LEFT_PAREN)
     {
-        st->setType(ST_CALL);
+        st->setType(ST_FUNCTION);
         st->setValue(this->parser_parse_block());
     }
 
@@ -87,17 +85,6 @@ SyntaxTree *Parser::parser_parse_expression()
         (st->getChildren())->list_push(this->parser_parse_statement());
     }
 
-    // if (this->token->getType() == TOKEN_COLON)
-    // {
-    //     this->parser_eat(TOKEN_COLON);
-
-    //     while (this->token->getType() == TOKEN_ID)
-    //     {
-    //         st->setDataType(typename_to_int(this->token->getValue()));
-    //         this->parser_eat(TOKEN_ID);
-    //     }
-    // }
-
     return st;
 }
 
@@ -107,8 +94,7 @@ SyntaxTree *Parser::parser_parse_return()
 
     SyntaxTree *st = new SyntaxTree(ST_CALL);
     st->setName("return");
-    st->setValue(this->parser_parse_block());
-
+    st->setValue(this->parser_parse_expression());
     return st;
 }
 

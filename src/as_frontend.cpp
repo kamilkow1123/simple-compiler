@@ -58,7 +58,6 @@ string as_f_variable(SyntaxTree *st)
 string as_f_call(SyntaxTree *st)
 {
     string s = "";
-
     if (st->getName() == "return")
     {
         // SyntaxTree *first_arg = nullptr;
@@ -100,6 +99,7 @@ string as_f(SyntaxTree *st)
 {
     string value = "";
     string next_value = "";
+
     switch (st->getType())
     {
     case ST_COMPOUND:
@@ -119,6 +119,7 @@ string as_f(SyntaxTree *st)
         break;
     case ST_FUNCTION:
         next_value = as_f_function(st);
+        break;
     default:
     {
         cout << "[As frontend]: No frontend for ST of type " << st->getType() << endl;
