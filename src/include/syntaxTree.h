@@ -1,6 +1,6 @@
 #ifndef _SYNTAX_TREE_H_
 #define _SYNTAX_TREE_H_
-#include<iostream>
+#include <iostream>
 #include "../list.cpp"
 using namespace std;
 
@@ -26,19 +26,20 @@ private:
     SyntaxTree *value;
     int int_value;
     int data_type;
+
 public:
     SyntaxTree(SyntaxType);
     void setName(string);
     string getName();
-    void setValue(SyntaxTree*);
+    void setValue(SyntaxTree *);
     SyntaxTree *getValue();
     void setDataType(int);
     int getDataType();
     SyntaxType getType();
     void setType(SyntaxType);
-    List* getChildren() {return this->children;}
+    List *getChildren() { return this->children; }
     void setIntValue(int);
-    int getIntValue(){return this->int_value;};
+    int getIntValue() { return this->int_value; };
 };
 
 #endif
