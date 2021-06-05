@@ -8,5 +8,5 @@ int $0x80
 
 .global main
 main:
-mov $34, %eax
+mov $69, %eax
 ret
