@@ -5,6 +5,8 @@ using namespace std;
 
 string section_data = ".data\n";
 int string_counter = 1;
+string section_bss = ".bss\n";
+string constants = "";
 
 string as_f_compound(SyntaxTree *st)
 {
@@ -20,19 +22,14 @@ string as_f_compound(SyntaxTree *st)
 
 string as_f_assignment(SyntaxTree *st)
 {
-    string s;
-    if (st->getValue()->getType() == ST_FUNCTION)
-    {
-        const string temp = ".global " + st->getName() + "\n" + st->getName() + ":\n";
+    string s = "";
 
-        s = temp;
+    string var_name = st->getName();
+    string value = ((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getName();
 
-        SyntaxTree *as_val = st->getValue();
+    string assign_string = var_name + ": .ascii \"" + value + "\"\n" + var_name + "_len = .- " + var_name + "\n";
 
-        string as_val_val = as_f(as_val->getValue());
-
-        s += as_val_val;
-    }
+    section_data += assign_string;
 
     return s;
 }
@@ -55,7 +52,17 @@ string as_f_function(SyntaxTree *st)
 
 string as_f_variable(SyntaxTree *st)
 {
-    return "";
+    string s = "";
+
+    string value = st->getName();
+
+    string var_declaration = value + ": .space " + value + "_len\n";
+
+    section_bss += var_declaration;
+
+    constants += value + "_len = 200\n";
+
+    return s;
 }
 
 string as_f_call(SyntaxTree *st)
@@ -71,28 +78,73 @@ string as_f_call(SyntaxTree *st)
                                                                                             "ret\n";
 
         s += temp;
+        return s;
     }
 
     if (st->getName() == "print")
     {
-        string value = ((SyntaxTree *)((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getItems(0))->getName();
+        int num_of_arg = ((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getSize();
 
-        string define = "text" + to_string(string_counter) + ": .ascii \"" + value + "\"\n"
-                                                                                     "text" +
-                        to_string(string_counter) + "_len = .- text" + to_string(string_counter) + "\n";
+        for (int i = 0; i < num_of_arg; i++)
+        {
 
-        const string print = "mov $4, %eax\n"
-                             "mov $1, %ebx\n"
-                             "mov $text" +
-                             to_string(string_counter) + ", %ecx\n"
-                                                         "mov $text" +
-                             to_string(string_counter) + "_len, %edx\n"
-                                                         "int $0x80\n";
+            SyntaxTree *print_arg = ((SyntaxTree *)((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getItems(i));
 
-        string_counter++;
+            if (print_arg->getType() == ST_STRING)
+            {
+                string value = ((SyntaxTree *)((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getItems(i))->getName();
 
-        s += print;
-        section_data += define;
+                string define = "text" + to_string(string_counter) + ": .ascii \"" + value + "\"\n"
+                                                                                             "text" +
+                                to_string(string_counter) + "_len = .- text" + to_string(string_counter) + "\n";
+
+                const string print = "mov $4, %eax\n"
+                                     "mov $1, %ebx\n"
+                                     "mov $text" +
+                                     to_string(string_counter) + ", %ecx\n"
+                                                                 "mov $text" +
+                                     to_string(string_counter) + "_len, %edx\n"
+                                                                 "int $0x80\n";
+
+                string_counter++;
+
+                s += print;
+                section_data += define;
+            }
+            else if (print_arg->getType() == ST_VARIABLE)
+            {
+                string var_name = print_arg->getName();
+                const string print = "mov $4, %eax\n"
+                                     "mov $1, %ebx\n"
+                                     "mov $" +
+                                     var_name + ", %ecx\n"
+                                                "mov $" +
+                                     var_name + "_len, %edx\n"
+                                                "int $0x80\n";
+
+                s += print;
+            }
+        }
+
+        return s;
+    }
+
+    if (st->getName() == "scan")
+    {
+        SyntaxTree *print_arg = ((SyntaxTree *)((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getItems(0));
+        if (print_arg->getType() == ST_VARIABLE)
+        {
+            string var_name = print_arg->getName();
+            const string scan = "mov $3, %eax\n"
+                                "mov $0, %ebx\n"
+                                "mov $" +
+                                var_name + ", %ecx\n"
+                                           "mov $" +
+                                var_name + "_len, %edx\n"
+                                           "int $0x80\n";
+
+            s += scan;
+        }
 
         return s;
     }
@@ -119,8 +171,12 @@ string as_f_root(SyntaxTree *st)
 
     string next_value = as_f(st);
     value += next_value;
-    section_data += value;
-    return section_data;
+    string result = "";
+    result += constants;
+    result += section_data;
+    result += section_bss;
+    result += value;
+    return result;
 }
 
 string as_f(SyntaxTree *st)

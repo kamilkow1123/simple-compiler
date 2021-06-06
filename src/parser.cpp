@@ -39,6 +39,14 @@ SyntaxTree *Parser::parser_parse_id()
         return st;
     }
 
+    if (value == "scan")
+    {
+        SyntaxTree *st = new SyntaxTree(ST_CALL);
+        st->setName(value);
+        st->setValue(this->parser_parse_block());
+        return st;
+    }
+
     if (this->token->getType() == TOKEN_EQUALS)
     {
         this->parser_eat(TOKEN_EQUALS);
@@ -116,6 +124,8 @@ SyntaxTree *Parser::parser_parse_loop()
 
 SyntaxTree *Parser::parser_parse_definition()
 {
+    this->parser_eat(TOKEN_LET);
+    return this->parser_parse_id();
 }
 
 SyntaxTree *Parser::parser_parse_int()
