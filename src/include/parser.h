@@ -18,6 +18,7 @@ public:
     SyntaxTree *parser_parse_block();
     SyntaxTree *parser_parse_expression();
     SyntaxTree *parser_parse_int();
+    SyntaxTree *parser_parse_string();
     SyntaxTree *parser_parse_statement();
     SyntaxTree *parser_parse_compound();
     SyntaxTree *parser_parse_conditional();

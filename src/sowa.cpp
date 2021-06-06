@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <fstream>
 #include "include/sowa.h"
 #include "lexer.cpp"
 #include "parser.cpp"
