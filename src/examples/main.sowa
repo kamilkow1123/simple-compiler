@@ -1,5 +1,9 @@
 main(){
-    print("Hello world!\n");
+    let a;
+    print("Enter your message: ");
+    scan(a);
+
+    print("Your message: ", a);
 
     return 0;
 }
