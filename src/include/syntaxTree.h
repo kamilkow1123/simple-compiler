@@ -14,6 +14,7 @@ enum SyntaxType
     ST_VARIABLE,
     ST_STATEMENT,
     ST_INT,
+    ST_STRING,
     ST_NOOP, // No operation
 };
 

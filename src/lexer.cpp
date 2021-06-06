@@ -58,6 +58,19 @@ Token *Lexer::lexer_parse_id()
 {
   string value = "";
 
+  if (this->c == '"')
+  {
+    this->lexer_advance();
+
+    while (this->c != '"')
+    {
+      value += this->c;
+      this->lexer_advance();
+    }
+    this->lexer_advance();
+    return new Token(value, TOKEN_STRING);
+  }
+
   while (isalpha(this->c))
   {
     value += this->c;
@@ -155,6 +168,8 @@ Token *Lexer::lexer_next_token()
       if (this->lexer_peek(1) == '|')
         return this->lexer_advance_with(this->lexer_advance_with(new Token("||", TOKEN_OR)));
       break;
+    case '"':
+      return this->lexer_parse_id();
     case '\0':
       break;
     default:

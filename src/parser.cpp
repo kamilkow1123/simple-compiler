@@ -31,6 +31,14 @@ SyntaxTree *Parser::parser_parse_id()
     string value = this->token->getValue();
     this->parser_eat(TOKEN_ID);
 
+    if (value == "print")
+    {
+        SyntaxTree *st = new SyntaxTree(ST_CALL);
+        st->setName(value);
+        st->setValue(this->parser_parse_block());
+        return st;
+    }
+
     if (this->token->getType() == TOKEN_EQUALS)
     {
         this->parser_eat(TOKEN_EQUALS);
@@ -121,6 +129,17 @@ SyntaxTree *Parser::parser_parse_int()
     return st;
 }
 
+SyntaxTree *Parser::parser_parse_string()
+{
+    string string_value = this->token->getValue();
+    this->parser_eat(TOKEN_STRING);
+
+    SyntaxTree *st = new SyntaxTree(ST_STRING);
+    st->setName(string_value);
+
+    return st;
+}
+
 SyntaxTree *Parser::parser_parse_statement()
 {
     switch (this->token->getType())
@@ -139,6 +158,8 @@ SyntaxTree *Parser::parser_parse_statement()
         return this->parser_parse_return();
     case TOKEN_LET:
         return this->parser_parse_definition();
+    case TOKEN_STRING:
+        return this->parser_parse_string();
     default:
     {
         cout << "[Parser]: Unexpected token: '" << this->token->getValue() << "'" << endl;

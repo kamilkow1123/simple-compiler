@@ -3,6 +3,9 @@
 #include "include/as_frontend.h"
 using namespace std;
 
+string section_data = ".data\n";
+int string_counter = 1;
+
 string as_f_compound(SyntaxTree *st)
 {
     string value = "";
@@ -70,6 +73,30 @@ string as_f_call(SyntaxTree *st)
         s += temp;
     }
 
+    if (st->getName() == "print")
+    {
+        string value = ((SyntaxTree *)((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getItems(0))->getName();
+
+        string define = "text" + to_string(string_counter) + ": .ascii \"" + value + "\"\n"
+                                                                                     "text" +
+                        to_string(string_counter) + "_len = .- text" + to_string(string_counter) + "\n";
+
+        const string print = "mov $4, %eax\n"
+                             "mov $1, %ebx\n"
+                             "mov $text" +
+                             to_string(string_counter) + ", %ecx\n"
+                                                         "mov $text" +
+                             to_string(string_counter) + "_len, %edx\n"
+                                                         "int $0x80\n";
+
+        string_counter++;
+
+        s += print;
+        section_data += define;
+
+        return s;
+    }
+
     return s;
 }
 
@@ -80,7 +107,7 @@ string as_f_int(SyntaxTree *st)
 
 string as_f_root(SyntaxTree *st)
 {
-    const string section_text = ".section .text\n"
+    const string section_text = ".text\n"
                                 ".global _start\n"
                                 "_start:\n"
                                 "call main\n"
@@ -92,7 +119,8 @@ string as_f_root(SyntaxTree *st)
 
     string next_value = as_f(st);
     value += next_value;
-    return value;
+    section_data += value;
+    return section_data;
 }
 
 string as_f(SyntaxTree *st)
