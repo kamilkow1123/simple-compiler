@@ -27,9 +27,20 @@ string as_f_assignment(SyntaxTree *st)
     string var_name = st->getName();
     string value = ((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getName();
 
-    string assign_string = var_name + ": .ascii \"" + value + "\"\n" + var_name + "_len = .- " + var_name + "\n";
+    if (value != "")
+    {
+        string assign_string = var_name + "_str: .ascii \"" + value + "\"\n" + var_name + "_str_len = .- " + var_name + "_str\n";
 
-    section_data += assign_string;
+        section_data += assign_string;
+    }
+    else
+    {
+        int value = ((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getIntValue();
+
+        string assign_int = var_name + ": .int " + to_string(value) + "\n" + var_name + "_str: .ascii \"" + to_string(value) + "\"\n" + var_name + "_str_len = .- " + var_name + "_str\n";
+
+        section_data += assign_int;
+    }
 
     return s;
 }
@@ -40,11 +51,11 @@ string as_f_variable(SyntaxTree *st)
 
     string value = st->getName();
 
-    string var_declaration = value + ": .space " + value + "_len\n";
+    string var_declaration = value + ": .space " + value + "_len\n" + value + "_str: .space " + value + "_str_len\n";
 
     section_bss += var_declaration;
 
-    constants += value + "_len = 200\n";
+    constants += value + "_len = 200\n" + value + "_str_len = 200\n";
 
     return s;
 }
@@ -73,9 +84,19 @@ string as_f_call(SyntaxTree *st)
 
             SyntaxTree *print_arg = ((SyntaxTree *)((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getItems(i));
 
-            if (print_arg->getType() == ST_STRING)
+            if (print_arg->getType() == ST_STRING || print_arg->getType() == ST_INT)
             {
-                string value = ((SyntaxTree *)((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getItems(i))->getName();
+                string value = "";
+                if (print_arg->getType() == ST_INT)
+                {
+                    value = to_string(print_arg->getIntValue());
+                }
+                else
+                {
+                    value = print_arg->getName();
+                }
+
+                // string value = ((SyntaxTree *)((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getItems(i))->getName();
 
                 string define = "text" + to_string(string_counter) + ": .ascii \"" + value + "\"\n"
                                                                                              "text" +
@@ -100,9 +121,9 @@ string as_f_call(SyntaxTree *st)
                 const string print = "mov $4, %eax\n"
                                      "mov $1, %ebx\n"
                                      "mov $" +
-                                     var_name + ", %ecx\n"
+                                     var_name + "_str , %ecx\n"
                                                 "mov $" +
-                                     var_name + "_len, %edx\n"
+                                     var_name + "_str_len, %edx\n"
                                                 "int $0x80\n";
 
                 s += print;
@@ -114,16 +135,16 @@ string as_f_call(SyntaxTree *st)
 
     if (st->getName() == "scan")
     {
-        SyntaxTree *print_arg = ((SyntaxTree *)((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getItems(0));
-        if (print_arg->getType() == ST_VARIABLE)
+        SyntaxTree *scan_arg = ((SyntaxTree *)((SyntaxTree *)st->getValue()->getChildren()->getItems(0))->getChildren()->getItems(0));
+        if (scan_arg->getType() == ST_VARIABLE)
         {
-            string var_name = print_arg->getName();
+            string var_name = scan_arg->getName();
             const string scan = "mov $3, %eax\n"
                                 "mov $0, %ebx\n"
                                 "mov $" +
-                                var_name + ", %ecx\n"
+                                var_name + "_str, %ecx\n"
                                            "mov $" +
-                                var_name + "_len, %edx\n"
+                                var_name + "_str_len, %edx\n"
                                            "int $0x80\n";
 
             s += scan;
