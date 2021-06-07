@@ -1,11 +1,8 @@
-greet(){
-    print("Hello\n");
-}
-
 main(){
-    print("Say hello\n");
-    greet();
+    let a;
+    a = 5;
 
+    print(a);
 
     return 0;
 }
