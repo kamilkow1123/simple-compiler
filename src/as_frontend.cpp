@@ -34,22 +34,6 @@ string as_f_assignment(SyntaxTree *st)
     return s;
 }
 
-string as_f_function(SyntaxTree *st)
-{
-    string s;
-    const string temp = ".global " + st->getName() + "\n" + st->getName() + ":\n";
-
-    s = temp;
-
-    SyntaxTree *as_val = st->getValue();
-
-    string as_val_val = as_f(as_val->getValue());
-
-    s += as_val_val;
-
-    return s;
-}
-
 string as_f_variable(SyntaxTree *st)
 {
     string s = "";
@@ -74,8 +58,7 @@ string as_f_call(SyntaxTree *st)
         // if(st->getValue()->getChildren()->getSize()) first_arg = (SyntaxTree*)st->getValue()->getChildren()->getItems(0);
         SyntaxTree *first_arg = (SyntaxTree *)(st->getValue()->getChildren()->getSize() ? st->getValue()->getChildren()->getItems(0) : nullptr);
 
-        const string temp = "mov $" + to_string(first_arg ? first_arg->getIntValue() : 0) + ", \%eax\n"
-                                                                                            "ret\n";
+        const string temp = "mov $" + to_string(first_arg ? first_arg->getIntValue() : 0) + ", \%eax\n";
 
         s += temp;
         return s;
@@ -148,6 +131,32 @@ string as_f_call(SyntaxTree *st)
 
         return s;
     }
+
+    s += "call " + st->getName() + "\n";
+
+    return s;
+}
+
+string as_f_function(SyntaxTree *st)
+{
+    string s;
+
+    if (st->getValue()->getType() == ST_CALL)
+    {
+        string call_func = as_f_call(st);
+        return call_func;
+    }
+
+    const string temp = ".global " + st->getName() + "\n" + st->getName() + ":\n";
+
+    s = temp;
+
+    SyntaxTree *as_val = st->getValue();
+
+    string as_val_val = as_f(as_val->getValue());
+
+    s += as_val_val;
+    s += "ret\n";
 
     return s;
 }

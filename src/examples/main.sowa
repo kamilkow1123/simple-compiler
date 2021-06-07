@@ -1,9 +1,11 @@
-main(){
-    let a;
-    print("Enter your message: ");
-    scan(a);
+greet(){
+    print("Hello\n");
+}
 
-    print("Your message: ", a);
+main(){
+    print("Say hello\n");
+    greet();
+
 
     return 0;
 }

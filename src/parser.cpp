@@ -85,6 +85,10 @@ SyntaxTree *Parser::parser_parse_block()
         st->setType(ST_FUNCTION);
         st->setValue(this->parser_parse_compound());
     }
+    else
+    {
+        st->setType(ST_CALL);
+    }
 
     return st;
 }
