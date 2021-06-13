@@ -1,8 +1,11 @@
+greet(){
+    print("How old are you?\n");
+    let age;
+    scan(age);
+    print("You are ", age, "\n");
+}
+
 main(){
-    let a;
-    a = 5;
-
-    print(a);
-
+    greet();
     return 0;
 }
