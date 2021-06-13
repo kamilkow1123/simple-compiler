@@ -158,27 +158,27 @@ SyntaxTree *Parser::parser_parse_statement()
 {
     switch (this->token->getType())
     {
-    case TOKEN_ID:
-        return this->parser_parse_id();
-    case TOKEN_LEFT_PAREN:
-        return this->parser_parse_block();
-    case TOKEN_INT:
-        return this->parser_parse_int();
-    case TOKEN_IF:
-        return this->parser_parse_conditional();
-    case TOKEN_WHILE:
-        return this->parser_parse_loop();
-    case TOKEN_RETURN:
-        return this->parser_parse_return();
-    case TOKEN_LET:
-        return this->parser_parse_definition();
-    case TOKEN_STRING:
-        return this->parser_parse_string();
-    default:
-    {
-        cout << "[Parser]: Unexpected token: '" << this->token->getValue() << "'" << endl;
-        exit(1);
-    }
+        case TOKEN_ID:
+            return this->parser_parse_id();
+        case TOKEN_LEFT_PAREN:
+            return this->parser_parse_block();
+        case TOKEN_INT:
+            return this->parser_parse_int();
+        case TOKEN_IF:
+            return this->parser_parse_conditional();
+        case TOKEN_WHILE:
+            return this->parser_parse_loop();
+        case TOKEN_RETURN:
+            return this->parser_parse_return();
+        case TOKEN_LET:
+            return this->parser_parse_definition();
+        case TOKEN_STRING:
+            return this->parser_parse_string();
+        default:
+        {
+            cout << "[Parser]: Unexpected token: '" << this->token->getValue() << "'" << endl;
+            exit(1);
+        }
     }
 }
 

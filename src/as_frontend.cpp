@@ -1,5 +1,5 @@
 #include <iostream>
-// #include<format>
+#include <string>
 #include "include/as_frontend.h"
 using namespace std;
 
@@ -216,30 +216,30 @@ string as_f(SyntaxTree *st)
 
     switch (st->getType())
     {
-    case ST_COMPOUND:
-        next_value = as_f_compound(st);
-        break;
-    case ST_ASSIGNMENT:
-        next_value = as_f_assignment(st);
-        break;
-    case ST_VARIABLE:
-        next_value = as_f_variable(st);
-        break;
-    case ST_CALL:
-        next_value = as_f_call(st);
-        break;
-    case ST_INT:
-        next_value = as_f_int(st);
-        break;
-    case ST_FUNCTION:
-        next_value = as_f_function(st);
-        break;
-    default:
-    {
-        cout << "[As frontend]: No frontend for ST of type " << st->getType() << endl;
-        exit(1);
-        break;
-    }
+        case ST_COMPOUND:
+            next_value = as_f_compound(st);
+            break;
+        case ST_ASSIGNMENT:
+            next_value = as_f_assignment(st);
+            break;
+        case ST_VARIABLE:
+            next_value = as_f_variable(st);
+            break;
+        case ST_CALL:
+            next_value = as_f_call(st);
+            break;
+        case ST_INT:
+            next_value = as_f_int(st);
+            break;
+        case ST_FUNCTION:
+            next_value = as_f_function(st);
+            break;
+        default:
+        {
+            cout << "[As frontend]: No frontend for ST of type " << st->getType() << endl;
+            exit(1);
+            break;
+        }
     }
 
     value += next_value;

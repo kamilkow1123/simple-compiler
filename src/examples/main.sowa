@@ -1,8 +1,16 @@
-main(){
-    let a;
-    a = 5;
+greet(){
+    let name;
+    print("Podaj swoje imie: ");
+    scan(name);
+    print("Witaj, ", name, "!\n");
+}
 
-    print(a);
+main(){
+    greet();
+
+    let text = "Jest rok ";
+    let year = 2021;
+    print(text, year, "\n");
 
     return 0;
 }
